@@ -2,7 +2,7 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const { error } = require('dotenv').config();
 
-if (error && (!process.env.MAILER_MAIL || !process.env.MAILER_PASS)) {
+if (error && (!process.env.MAILER_MAIL || !process.env.MAILER_PASS || process.env.MAILER_TO)) {
 	console.log('Environment variables not set up..!')
 	throw error;
 }
@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
 
 const mailOptions = {
 	from: process.env.MAILER_MAIL,
-	to: 'chetanbohra26@gmail.com',
+	to: process.env.MAILER_TO,
 	subject: 'Test mail',
 	text: 'Success twice..!'
 };
@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 app.get('/mail', (req, res) => {
 	sendMail((err, info) => {
 		if (err) return res.send('Failed..!');
-		res.send('Success..!');
+		res.send('Info:'+JSON.stringify(info));
 	})
 })
 
